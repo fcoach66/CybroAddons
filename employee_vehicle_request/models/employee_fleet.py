@@ -88,7 +88,7 @@ class EmployeeFleet(models.Model):
                         (self.employee.name, self.name)
 
         main_content = {
-            'subject': _('%s: Approved') % self.name,
+            'subject': _('%s: Rejected') % self.name,
             'author_id': self.env.user.partner_id.id,
             'body_html': mail_content,
             'email_to': self.employee.work_email,
