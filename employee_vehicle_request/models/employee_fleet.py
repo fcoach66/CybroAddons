@@ -112,7 +112,7 @@ class EmployeeFleet(models.Model):
         self.returned_date = fields.datetime.now()
         self.state = 'return'
 
-    @api.constrains('date_rom', 'date_to')
+    @api.constrains('date_from', 'date_to')
     def onchange_date_to(self):
         for each in self:
             if each.date_from > each.date_to:
@@ -124,17 +124,18 @@ class EmployeeFleet(models.Model):
         fleet_obj = self.env['fleet.vehicle'].search([])
         for i in fleet_obj:
             for each in i.reserved_time:
-                if each.date_from <= self.date_from <= each.date_to:
-                    i.write({'check_availability': False})
-                elif self.date_from < each.date_from:
-                    if each.date_from <= self.date_to <= each.date_to:
-                        i.write({'check_availability': False})
-                    elif self.date_to > each.date_to:
-                        i.write({'check_availability': False})
-                    else:
-                        i.write({'check_availability': True})
-                else:
-                    i.write({'check_availability': True})
+                if self.date_from and self.date_to:
+                  if each.date_from <= self.date_from <= each.date_to:
+                      i.write({'check_availability': False})
+                  elif self.date_from < each.date_from:
+                      if each.date_from <= self.date_to <= each.date_to:
+                          i.write({'check_availability': False})
+                      elif self.date_to > each.date_to:
+                          i.write({'check_availability': False})
+                      else:
+                          i.write({'check_availability': True})
+                  else:
+                      i.write({'check_availability': True})
 
     reserved_fleet_id = fields.Many2one('fleet.reserved', invisible=1, copy=False)
     name = fields.Char(string='Request Number', copy=False)
