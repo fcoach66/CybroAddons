@@ -45,9 +45,9 @@ class SaleOrder(models.Model):
                 'amount_total': amount_untaxed + amount_tax,
             })
 
-    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount type',
+    discount_type = fields.Selection([('none', 'None'), ('percent', 'Percentage'), ('amount', 'Amount')], string='Discount type',
                                      readonly=True,states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
-                                     default='percent')
+                                     default='none')
     discount_rate = fields.Float('Discount Rate', digits=dp.get_precision('Account'),
                                  readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]})
     amount_untaxed = fields.Monetary(string='Untaxed Amount', store=True, readonly=True, compute='_amount_all',
@@ -65,7 +65,7 @@ class SaleOrder(models.Model):
             if order.discount_type == 'percent':
                 for line in order.order_line:
                     line.discount = order.discount_rate
-            else:
+            elif order.discount_type == 'amount':
                 total = discount = 0.0
                 for line in order.order_line:
                     total += round((line.product_uom_qty * line.price_unit))
