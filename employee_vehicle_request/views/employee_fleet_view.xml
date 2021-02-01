@@ -115,13 +115,11 @@
         <menuitem id="employee_fleet_menu"
                   name="Vehicle Request"
                   parent="hr.menu_hr_root"
-                  sequence="4"
-                  groups="hr.group_hr_manager"/>
+                  sequence="4"/>
         <menuitem id="employee_fleet_sub_menu"
                   name="Vehicle Request"
                   parent="employee_fleet_menu"
                   sequence="1"
-                  groups="hr.group_hr_manager"
                   action="action_employee_fleet"/>
     </data>
 </odoo>
