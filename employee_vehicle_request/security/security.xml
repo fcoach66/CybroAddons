@@ -7,5 +7,9 @@
          <record model="res.groups" id="hr.group_hr_manager">
             <field name="implied_ids" eval="[(4, ref('fleet.fleet_group_manager'))]"/>
          </record>
+         <record id="employee_vehicle_request_user" model="res.groups">
+            <field name="name">Employee Vehicle Request</field>
+            <field name="implied_ids" eval="[(4, ref('fleet.fleet_group_user'))]"/>
+         </record>
     </data>
 </odoo>
