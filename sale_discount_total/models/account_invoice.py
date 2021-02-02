@@ -45,8 +45,8 @@ class AccountInvoice(models.Model):
         self.amount_total_signed = self.amount_total * sign
         self.amount_untaxed_signed = amount_untaxed_signed * sign
 
-    discount_type = fields.Selection([('percent', 'Percentage'), ('amount', 'Amount')], string='Discount Type',
-                                     readonly=True, states={'draft': [('readonly', False)]}, default='percent')
+    discount_type = fields.Selection([('none', 'None'), ('percent', 'Percentage'), ('amount', 'Amount')], string='Discount Type',
+                                     readonly=True, states={'draft': [('readonly', False)]}, default='none')
     discount_rate = fields.Float('Discount Amount', digits=(16, 2), readonly=True, states={'draft': [('readonly', False)]})
     amount_discount = fields.Monetary(string='Discount', store=True, readonly=True, compute='_compute_amount',
                                       track_visibility='always')
@@ -57,7 +57,7 @@ class AccountInvoice(models.Model):
             if inv.discount_type == 'percent':
                 for line in inv.invoice_line_ids:
                     line.discount = inv.discount_rate
-            else:
+            elif inv.discount_type == 'amount':
                 total = discount = 0.0
                 for line in inv.invoice_line_ids:
                     total += (line.quantity * line.price_unit)
